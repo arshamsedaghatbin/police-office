@@ -41,6 +41,9 @@ public class StolenBiker implements Serializable {
     @JsonIgnoreProperties("stolenBikes")
     private Biker biker;
 
+    @Enumerated(EnumType.STRING)
+    private StolenStatus stolenStatus;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -70,6 +73,14 @@ public class StolenBiker implements Serializable {
     public StolenBiker color(String color) {
         this.color = color;
         return this;
+    }
+
+    public StolenStatus getStolenStatus() {
+        return stolenStatus;
+    }
+
+    public void setStolenStatus(StolenStatus stolenStatus) {
+        this.stolenStatus = stolenStatus;
     }
 
     public void setColor(String color) {

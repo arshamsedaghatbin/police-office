@@ -1,5 +1,7 @@
 package com.officer.policeofiicer.service.dto;
 
+import com.officer.policeofiicer.domain.StolenStatus;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -25,6 +27,17 @@ public class StolenBikerDTO implements Serializable {
 
 
     private Long bikerId;
+
+    private StolenStatus stolenStatus;
+
+
+    public StolenStatus getStolenStatus() {
+        return stolenStatus;
+    }
+
+    public void setStolenStatus(StolenStatus stolenStatus) {
+        this.stolenStatus = stolenStatus;
+    }
 
     public Long getId() {
         return id;

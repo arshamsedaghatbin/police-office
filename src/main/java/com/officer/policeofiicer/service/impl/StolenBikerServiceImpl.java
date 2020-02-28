@@ -1,12 +1,20 @@
 package com.officer.policeofiicer.service.impl;
 
+import com.officer.policeofiicer.domain.PoliceOfficer;
 import com.officer.policeofiicer.domain.StolenBiker;
+import com.officer.policeofiicer.domain.StolenStatus;
+import com.officer.policeofiicer.domain.enumeration.PoliceOfficerStatus;
+import com.officer.policeofiicer.repository.PoliceOfficerRepository;
 import com.officer.policeofiicer.repository.StolenBikerRepository;
+import com.officer.policeofiicer.service.PoliceOfficerCashService;
+import com.officer.policeofiicer.service.PoliceOfficerService;
+import com.officer.policeofiicer.service.StolenBikerCashService;
 import com.officer.policeofiicer.service.StolenBikerService;
 import com.officer.policeofiicer.service.dto.StolenBikerDTO;
 import com.officer.policeofiicer.service.mapper.StolenBikerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +35,15 @@ public class StolenBikerServiceImpl implements StolenBikerService {
 
     private final StolenBikerMapper stolenBikerMapper;
 
+    @Autowired
+    private StolenBikerCashService stolenBikerCashService;
+
+    @Autowired
+    private PoliceOfficerRepository policeOfficerRepository;
+
+    @Autowired
+    private PoliceOfficerCashService policeOfficerCashService;
+
     public StolenBikerServiceImpl(StolenBikerRepository stolenBikerRepository, StolenBikerMapper stolenBikerMapper) {
         this.stolenBikerRepository = stolenBikerRepository;
         this.stolenBikerMapper = stolenBikerMapper;
@@ -39,10 +56,23 @@ public class StolenBikerServiceImpl implements StolenBikerService {
      * @return the persisted entity.
      */
     @Override
-    public StolenBikerDTO save(StolenBikerDTO stolenBikerDTO) {
+    public StolenBikerDTO
+    save(StolenBikerDTO stolenBikerDTO) {
         log.debug("Request to save StolenBiker : {}", stolenBikerDTO);
         StolenBiker stolenBiker = stolenBikerMapper.toEntity(stolenBikerDTO);
-        stolenBiker = stolenBikerRepository.save(stolenBiker);
+        PoliceOfficer freePolice = policeOfficerCashService.getFreePolice();
+        if (freePolice!=null){
+            freePolice.setPoliceOfficer(stolenBiker);
+            freePolice.setStatus(PoliceOfficerStatus.ENGAGE);
+            stolenBiker.setStolenStatus(StolenStatus.IN_PROGRESS);
+            stolenBikerRepository.save(stolenBiker);
+            policeOfficerRepository.save(freePolice);
+        }
+        else {
+            stolenBiker.setStolenStatus(StolenStatus.NOT_ASSIGN);
+            stolenBikerRepository.save(stolenBiker);
+            stolenBikerCashService.addStolenBiker(stolenBiker);
+        }
         return stolenBikerMapper.toDto(stolenBiker);
     }
 

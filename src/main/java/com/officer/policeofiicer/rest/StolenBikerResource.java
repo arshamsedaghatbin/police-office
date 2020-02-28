@@ -96,6 +96,13 @@ public class StolenBikerResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @PostMapping("/search/stolen-bikers")
+    public ResponseEntity<List<StolenBikerDTO>> searchStolenBiker(@RequestBody StolenBikerDTO stolenBikerDTO) {
+        log.debug("REST request to get a page of StolenBikers");
+        List<StolenBikerDTO> stolenBikerDTOS = stolenBikerService.searchByProperties(stolenBikerDTO);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME,"1")).body(stolenBikerDTOS);
+    }
+
     /**
      * {@code GET  /stolen-bikers/:id} : get the "id" stolenBiker.
      *

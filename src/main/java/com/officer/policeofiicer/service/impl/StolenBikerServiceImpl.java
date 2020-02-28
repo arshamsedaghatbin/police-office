@@ -7,7 +7,6 @@ import com.officer.policeofiicer.domain.enumeration.PoliceOfficerStatus;
 import com.officer.policeofiicer.repository.PoliceOfficerRepository;
 import com.officer.policeofiicer.repository.StolenBikerRepository;
 import com.officer.policeofiicer.service.PoliceOfficerCashService;
-import com.officer.policeofiicer.service.PoliceOfficerService;
 import com.officer.policeofiicer.service.StolenBikerCashService;
 import com.officer.policeofiicer.service.StolenBikerService;
 import com.officer.policeofiicer.service.dto.StolenBikerDTO;
@@ -15,11 +14,13 @@ import com.officer.policeofiicer.service.mapper.StolenBikerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -113,5 +114,11 @@ public class StolenBikerServiceImpl implements StolenBikerService {
     public void delete(Long id) {
         log.debug("Request to delete StolenBiker : {}", id);
         stolenBikerRepository.deleteById(id);
+    }
+
+    @Override
+    public List<StolenBikerDTO> searchByProperties(StolenBikerDTO stolenBiker){
+       return stolenBikerMapper.toDto(stolenBikerRepository
+                .findAll(Example.of(stolenBikerMapper.toEntity(stolenBiker))));
     }
 }

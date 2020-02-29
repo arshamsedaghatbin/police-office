@@ -6,7 +6,7 @@ import com.officer.policeofiicer.rest.util.HeaderUtil;
 import com.officer.policeofiicer.rest.util.PaginationUtil;
 import com.officer.policeofiicer.rest.util.ResponseUtil;
 import com.officer.policeofiicer.service.StolenBikerService;
-import com.officer.policeofiicer.service.dto.StolenBikerDTO;
+import com.police.officer.dto.StolenBikerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import com.police.officer.client.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,8 +26,7 @@ import java.util.Optional;
  * REST controller for managing {@link StolenBiker}.
  */
 @RestController
-@RequestMapping("/api")
-public class StolenBikerResource {
+public class StolenBikerResource implements StolenBikerClient{
 
     private final Logger log = LoggerFactory.getLogger(StolenBikerResource.class);
 
@@ -49,7 +48,6 @@ public class StolenBikerResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new stolenBikerDTO, or with status {@code 400 (Bad Request)} if the stolenBiker has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/stolen-bikers")
     public ResponseEntity<StolenBikerDTO> createStolenBiker(@RequestBody StolenBikerDTO stolenBikerDTO) throws URISyntaxException {
         log.debug("REST request to save StolenBiker : {}", stolenBikerDTO);
         if (stolenBikerDTO.getId() != null) {
@@ -70,7 +68,6 @@ public class StolenBikerResource {
      * or with status {@code 500 (Internal Server Error)} if the stolenBikerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/stolen-bikers")
     public ResponseEntity<StolenBikerDTO> updateStolenBiker(@RequestBody StolenBikerDTO stolenBikerDTO) throws URISyntaxException {
         log.debug("REST request to update StolenBiker : {}", stolenBikerDTO);
         if (stolenBikerDTO.getId() == null) {
@@ -88,7 +85,6 @@ public class StolenBikerResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stolenBikers in body.
      */
-    @GetMapping("/stolen-bikers")
     public ResponseEntity<List<StolenBikerDTO>> getAllStolenBikers(Pageable pageable) {
         log.debug("REST request to get a page of StolenBikers");
         Page<StolenBikerDTO> page = stolenBikerService.findAll(pageable);
@@ -96,7 +92,6 @@ public class StolenBikerResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    @PostMapping("/search/stolen-bikers")
     public ResponseEntity<List<StolenBikerDTO>> searchStolenBiker(@RequestBody StolenBikerDTO stolenBikerDTO) {
         log.debug("REST request to get a page of StolenBikers");
         List<StolenBikerDTO> stolenBikerDTOS = stolenBikerService.searchByProperties(stolenBikerDTO);
@@ -109,7 +104,6 @@ public class StolenBikerResource {
      * @param id the id of the stolenBikerDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the stolenBikerDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/stolen-bikers/{id}")
     public ResponseEntity<StolenBikerDTO> getStolenBiker(@PathVariable Long id) {
         log.debug("REST request to get StolenBiker : {}", id);
         Optional<StolenBikerDTO> stolenBikerDTO = stolenBikerService.findOne(id);
@@ -122,7 +116,6 @@ public class StolenBikerResource {
      * @param id the id of the stolenBikerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/stolen-bikers/{id}")
     public ResponseEntity<Void> deleteStolenBiker(@PathVariable Long id) {
         log.debug("REST request to delete StolenBiker : {}", id);
         stolenBikerService.delete(id);

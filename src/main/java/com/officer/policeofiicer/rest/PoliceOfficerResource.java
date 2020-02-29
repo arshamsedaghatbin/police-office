@@ -6,7 +6,7 @@ import com.officer.policeofiicer.rest.util.HeaderUtil;
 import com.officer.policeofiicer.rest.util.PaginationUtil;
 import com.officer.policeofiicer.rest.util.ResponseUtil;
 import com.officer.policeofiicer.service.PoliceOfficerService;
-import com.officer.policeofiicer.service.dto.PoliceOfficerDTO;
+import com.police.officer.dto.PoliceOfficerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import com.police.officer.client.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,8 +26,7 @@ import java.util.Optional;
  * REST controller for managing {@link PoliceOfficer}.
  */
 @RestController
-@RequestMapping("/api")
-public class PoliceOfficerResource {
+public class PoliceOfficerResource implements PoliceOfficerClient {
 
     private final Logger log = LoggerFactory.getLogger(PoliceOfficerResource.class);
 
@@ -49,7 +48,6 @@ public class PoliceOfficerResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new policeOfficerDTO, or with status {@code 400 (Bad Request)} if the policeOfficer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/police-officers")
     public ResponseEntity<PoliceOfficerDTO> createPoliceOfficer(@RequestBody PoliceOfficerDTO policeOfficerDTO) throws URISyntaxException {
         log.debug("REST request to save PoliceOfficer : {}", policeOfficerDTO);
         if (policeOfficerDTO.getId() != null) {
@@ -70,7 +68,6 @@ public class PoliceOfficerResource {
      * or with status {@code 500 (Internal Server Error)} if the policeOfficerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/police-officers")
     public ResponseEntity<PoliceOfficerDTO> updatePoliceOfficer(@RequestBody PoliceOfficerDTO policeOfficerDTO) throws URISyntaxException {
         log.debug("REST request to update PoliceOfficer : {}", policeOfficerDTO);
         if (policeOfficerDTO.getId() == null) {
@@ -88,7 +85,6 @@ public class PoliceOfficerResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of policeOfficers in body.
      */
-    @GetMapping("/police-officers")
     public ResponseEntity<List<PoliceOfficerDTO>> getAllPoliceOfficers(Pageable pageable) {
         log.debug("REST request to get a page of PoliceOfficers");
         Page<PoliceOfficerDTO> page = policeOfficerService.findAll(pageable);
@@ -102,7 +98,6 @@ public class PoliceOfficerResource {
      * @param id the id of the policeOfficerDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the policeOfficerDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/police-officers/{id}")
     public ResponseEntity<PoliceOfficerDTO> getPoliceOfficer(@PathVariable Long id) {
         log.debug("REST request to get PoliceOfficer : {}", id);
         Optional<PoliceOfficerDTO> policeOfficerDTO = policeOfficerService.findOne(id);
@@ -115,7 +110,6 @@ public class PoliceOfficerResource {
      * @param id the id of the policeOfficerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/police-officers/{id}")
     public ResponseEntity<Void> deletePoliceOfficer(@PathVariable Long id) {
         log.debug("REST request to delete PoliceOfficer : {}", id);
         policeOfficerService.delete(id);

@@ -5,7 +5,8 @@ import com.officer.policeofiicer.rest.errors.BadRequestAlertException;
 import com.officer.policeofiicer.rest.util.HeaderUtil;
 import com.officer.policeofiicer.rest.util.ResponseUtil;
 import com.officer.policeofiicer.service.BikerService;
-import com.officer.policeofiicer.service.dto.BikerDTO;
+import com.police.officer.client.BikerClient;
+import com.police.officer.dto.BikerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link Biker}.
  */
 @RestController
-@RequestMapping("/api")
-public class BikerResource {
+public class BikerResource implements BikerClient {
 
     private final Logger log = LoggerFactory.getLogger(BikerResource.class);
 
@@ -44,7 +44,6 @@ public class BikerResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new bikerDTO, or with status {@code 400 (Bad Request)} if the biker has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/bikers")
     public ResponseEntity<BikerDTO> createBiker(@RequestBody BikerDTO bikerDTO) throws URISyntaxException {
         log.debug("REST request to save Biker : {}", bikerDTO);
         if (bikerDTO.getId() != null) {
@@ -65,7 +64,6 @@ public class BikerResource {
      * or with status {@code 500 (Internal Server Error)} if the bikerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/bikers")
     public ResponseEntity<BikerDTO> updateBiker(@RequestBody BikerDTO bikerDTO) throws URISyntaxException {
         log.debug("REST request to update Biker : {}", bikerDTO);
         if (bikerDTO.getId() == null) {
@@ -82,7 +80,6 @@ public class BikerResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of bikers in body.
      */
-    @GetMapping("/bikers")
     public List<BikerDTO> getAllBikers() {
         log.debug("REST request to get all Bikers");
         return bikerService.findAll();
@@ -94,7 +91,6 @@ public class BikerResource {
      * @param id the id of the bikerDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the bikerDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/bikers/{id}")
     public ResponseEntity<BikerDTO> getBiker(@PathVariable Long id) {
         log.debug("REST request to get Biker : {}", id);
         Optional<BikerDTO> bikerDTO = bikerService.findOne(id);
@@ -107,7 +103,6 @@ public class BikerResource {
      * @param id the id of the bikerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/bikers/{id}")
     public ResponseEntity<Void> deleteBiker(@PathVariable Long id) {
         log.debug("REST request to delete Biker : {}", id);
         bikerService.delete(id);

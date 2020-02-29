@@ -6,7 +6,8 @@ import com.officer.policeofiicer.rest.util.HeaderUtil;
 import com.officer.policeofiicer.rest.util.PaginationUtil;
 import com.officer.policeofiicer.rest.util.ResponseUtil;
 import com.officer.policeofiicer.service.PoliceService;
-import com.officer.policeofiicer.service.dto.PoliceDTO;
+import com.police.officer.client.PoliceClient;
+import com.police.officer.dto.PoliceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,7 @@ import java.util.Optional;
  * REST controller for managing {@link Police}.
  */
 @RestController
-@RequestMapping("/api")
-public class PoliceResource {
+public class PoliceResource implements PoliceClient {
 
     private final Logger log = LoggerFactory.getLogger(PoliceResource.class);
 
@@ -49,7 +49,6 @@ public class PoliceResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new policeDTO, or with status {@code 400 (Bad Request)} if the police has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/police")
     public ResponseEntity<PoliceDTO> createPolice(@RequestBody PoliceDTO policeDTO) throws URISyntaxException {
         log.debug("REST request to save Police : {}", policeDTO);
         if (policeDTO.getId() != null) {
@@ -70,7 +69,6 @@ public class PoliceResource {
      * or with status {@code 500 (Internal Server Error)} if the policeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/police")
     public ResponseEntity<PoliceDTO> updatePolice(@RequestBody PoliceDTO policeDTO) throws URISyntaxException {
         log.debug("REST request to update Police : {}", policeDTO);
         if (policeDTO.getId() == null) {
@@ -88,7 +86,6 @@ public class PoliceResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of police in body.
      */
-    @GetMapping("/police")
     public ResponseEntity<List<PoliceDTO>> getAllPolice(Pageable pageable) {
         log.debug("REST request to get a page of Police");
         Page<PoliceDTO> page = policeService.findAll(pageable);
@@ -102,7 +99,6 @@ public class PoliceResource {
      * @param id the id of the policeDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the policeDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/police/{id}")
     public ResponseEntity<PoliceDTO> getPolice(@PathVariable Long id) {
         log.debug("REST request to get Police : {}", id);
         Optional<PoliceDTO> policeDTO = policeService.findOne(id);
@@ -115,7 +111,6 @@ public class PoliceResource {
      * @param id the id of the policeDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/police/{id}")
     public ResponseEntity<Void> deletePolice(@PathVariable Long id) {
         log.debug("REST request to delete Police : {}", id);
         policeService.delete(id);

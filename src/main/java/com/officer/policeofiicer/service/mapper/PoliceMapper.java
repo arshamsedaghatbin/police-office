@@ -2,7 +2,7 @@ package com.officer.policeofiicer.service.mapper;
 
 
 import com.officer.policeofiicer.domain.Police;
-import com.officer.policeofiicer.service.dto.PoliceDTO;
+import com.police.officer.dto.PoliceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

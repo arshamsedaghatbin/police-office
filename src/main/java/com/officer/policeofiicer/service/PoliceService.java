@@ -1,7 +1,7 @@
 package com.officer.policeofiicer.service;
 
 import com.officer.policeofiicer.domain.Police;
-import com.officer.policeofiicer.service.dto.PoliceDTO;
+import com.police.officer.dto.PoliceDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

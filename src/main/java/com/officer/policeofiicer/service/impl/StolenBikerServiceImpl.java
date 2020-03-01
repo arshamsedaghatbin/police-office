@@ -57,6 +57,7 @@ public class StolenBikerServiceImpl implements StolenBikerService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public StolenBikerDTO
     save(StolenBikerDTO stolenBikerDTO) {
         log.debug("Request to save StolenBiker : {}", stolenBikerDTO);

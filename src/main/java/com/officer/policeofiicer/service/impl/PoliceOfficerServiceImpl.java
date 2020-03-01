@@ -55,6 +55,7 @@ public class PoliceOfficerServiceImpl implements PoliceOfficerService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public PoliceOfficerDTO save(PoliceOfficerDTO policeOfficerDTO) {
         log.debug("Request to save PoliceOfficer : {}", policeOfficerDTO);
         PoliceOfficer policeOfficer = policeOfficerMapper.toEntity(policeOfficerDTO);
